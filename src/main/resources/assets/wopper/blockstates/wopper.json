@@ -7,9 +7,11 @@
       "inside": "wopper:blocks/wopper_inside",
       "side": "wopper:blocks/wopper_side",
       "top": "wopper:blocks/wopper_top"
-    }
+    },
+    "transform": "forge:default-block"
   },
   "variants": {
+    "inventory": [{ "model": "wopper:wopper_down" }],
     "facing": {
       "down": {
         "model": "wopper:wopper_down"
