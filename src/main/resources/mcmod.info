@@ -1,0 +1,19 @@
+[
+{
+  "modid": "wopper",
+  "name": "Wopper",
+  "description": "A mod that adds a wooden hopper",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "http://github.com/Ellpeck/Wopper",
+  "updateUrl": "",
+  "authorList": [ "Ellpeck" ],
+  "credits": "Ellpeck",
+  "logoFile": "",
+  "screenshots": [
+  ],
+  "parent":"",
+  "dependencies": [
+  ]
+}
+]
