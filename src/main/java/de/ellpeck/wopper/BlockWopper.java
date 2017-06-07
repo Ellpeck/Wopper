@@ -69,7 +69,7 @@ public class BlockWopper extends BlockContainer{
     }
 
     @Override
-    public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, Entity entityIn){
+    public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, Entity entityIn, boolean someBool){
         addCollisionBoxToList(pos, entityBox, collidingBoxes, BASE_AABB);
         addCollisionBoxToList(pos, entityBox, collidingBoxes, EAST_AABB);
         addCollisionBoxToList(pos, entityBox, collidingBoxes, WEST_AABB);
@@ -78,7 +78,7 @@ public class BlockWopper extends BlockContainer{
     }
 
     @Override
-    public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer, ItemStack stack){
+    public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer){
         EnumFacing opp = facing.getOpposite();
         return this.getDefaultState().withProperty(FACING, opp == EnumFacing.UP ? EnumFacing.DOWN : opp);
     }
@@ -136,8 +136,8 @@ public class BlockWopper extends BlockContainer{
     }
 
     @Override
-    public void neighborChanged(IBlockState state, World world, BlockPos pos, Block block){
-        super.neighborChanged(state, world, pos, block);
+    public void neighborChanged(IBlockState state, World world, BlockPos pos, Block block, BlockPos fromPos){
+        super.neighborChanged(state, world, pos, block, fromPos);
 
         this.neighborChange(world, pos);
     }

@@ -25,20 +25,20 @@ public class TileEntityWopper extends TileEntity implements ITickable{
 
     @Override
     public void update(){
-        if(!this.worldObj.isRemote){
-            if(this.isEnabled && this.worldObj.getTotalWorldTime()%Wopper.wopperSpeed == 0){
+        if(!this.world.isRemote){
+            if(this.isEnabled && this.world.getTotalWorldTime()%Wopper.wopperSpeed == 0){
                 if(this.handlerPush != null){
                     if(this.handlerPull != null){
                         extract:
                         for(int i = 0; i < this.handlerPull.getSlots(); i++){
                             ItemStack stack = this.handlerPull.extractItem(i, 1, true);
 
-                            if(stack != null){
+                            if(!stack.isEmpty()){
                                 for(int j = 0; j < this.handlerPush.getSlots(); j++){
                                     ItemStack left = this.handlerPush.insertItem(j, stack, false);
 
                                     if(!ItemStack.areItemStacksEqual(stack, left)){
-                                        int toExtract = left == null ? stack.stackSize : stack.stackSize-left.stackSize;
+                                        int toExtract = left.isEmpty() ? stack.getCount() : stack.getCount()-left.getCount();
                                         this.handlerPull.extractItem(i, toExtract, false);
 
                                         break extract;
@@ -48,14 +48,14 @@ public class TileEntityWopper extends TileEntity implements ITickable{
                         }
                     }
                     else{
-                        List<EntityItem> items = this.worldObj.getEntitiesWithinAABB(EntityItem.class, new AxisAlignedBB(this.pos.getX(), this.pos.getY()+0.5, this.pos.getZ(), this.pos.getX()+1, this.pos.getY()+2, this.pos.getZ()+1));
+                        List<EntityItem> items = this.world.getEntitiesWithinAABB(EntityItem.class, new AxisAlignedBB(this.pos.getX(), this.pos.getY()+0.5, this.pos.getZ(), this.pos.getX()+1, this.pos.getY()+2, this.pos.getZ()+1));
                         if(items != null && !items.isEmpty()){
                             for(EntityItem item : items){
                                 if(item != null && !item.isDead){
                                     for(int i = 0; i < this.handlerPush.getSlots(); i++){
                                         ItemStack left = this.handlerPush.insertItem(i, item.getEntityItem(), false);
 
-                                        if(left != null){
+                                        if(!left.isEmpty()){
                                             item.setEntityItemStack(left);
                                         }
                                         else{
@@ -81,17 +81,17 @@ public class TileEntityWopper extends TileEntity implements ITickable{
         this.handlerPull = null;
         this.handlerPush = null;
 
-        TileEntity from = this.worldObj.getTileEntity(this.pos.up());
+        TileEntity from = this.world.getTileEntity(this.pos.up());
         if(from != null && from.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, EnumFacing.DOWN)){
             this.handlerPull = from.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, EnumFacing.DOWN);
         }
 
-        IBlockState state = this.worldObj.getBlockState(this.pos);
+        IBlockState state = this.world.getBlockState(this.pos);
         EnumFacing facing = state.getValue(BlockWopper.FACING);
         BlockPos toPos = this.pos.offset(facing);
 
-        if(this.worldObj.isBlockLoaded(toPos)){
-            TileEntity to = this.worldObj.getTileEntity(toPos);
+        if(this.world.isBlockLoaded(toPos)){
+            TileEntity to = this.world.getTileEntity(toPos);
             if(to != null){
                 EnumFacing opp = facing.getOpposite();
                 if(to.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, opp)){
@@ -100,7 +100,7 @@ public class TileEntityWopper extends TileEntity implements ITickable{
             }
         }
 
-        this.isEnabled = !Wopper.canBeDeactivated || this.worldObj.isBlockIndirectlyGettingPowered(this.pos) <= 0;
+        this.isEnabled = !Wopper.canBeDeactivated || this.world.isBlockIndirectlyGettingPowered(this.pos) <= 0;
     }
 
     @Override
