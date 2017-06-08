@@ -31,7 +31,7 @@ public class TileEntityWopper extends TileEntity implements ITickable{
                     if(this.handlerPull != null){
                         extract:
                         for(int i = 0; i < this.handlerPull.getSlots(); i++){
-                            ItemStack stack = this.handlerPull.extractItem(i, 1, true);
+                            ItemStack stack = this.handlerPull.extractItem(i, Wopper.extractAmount, true);
 
                             if(!stack.isEmpty()){
                                 for(int j = 0; j < this.handlerPush.getSlots(); j++){
@@ -52,15 +52,31 @@ public class TileEntityWopper extends TileEntity implements ITickable{
                         if(items != null && !items.isEmpty()){
                             for(EntityItem item : items){
                                 if(item != null && !item.isDead){
-                                    for(int i = 0; i < this.handlerPush.getSlots(); i++){
-                                        ItemStack left = this.handlerPush.insertItem(i, item.getEntityItem(), false);
+                                    ItemStack stack = item.getEntityItem();
+                                    if(!stack.isEmpty()){
+                                        ItemStack copy = stack.copy();
 
-                                        if(!left.isEmpty()){
-                                            item.setEntityItemStack(left);
+                                        if(copy.getCount() > Wopper.pickupAmount){
+                                            copy.setCount(Wopper.pickupAmount);
                                         }
-                                        else{
-                                            item.setDead();
-                                            break;
+
+                                        for(int i = 0; i < this.handlerPush.getSlots(); i++){
+                                            ItemStack left = this.handlerPush.insertItem(i, copy, false);
+
+                                            if(!ItemStack.areItemStacksEqual(copy, left)){
+                                                if(!left.isEmpty()){
+                                                    stack.shrink(copy.getCount()-left.getCount());
+                                                }
+                                                else{
+                                                    stack.shrink(copy.getCount());
+                                                }
+
+                                                if(stack.isEmpty()){
+                                                    item.setDead();
+                                                }
+
+                                                break;
+                                            }
                                         }
                                     }
                                 }
