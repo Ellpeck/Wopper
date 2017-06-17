@@ -48,12 +48,4 @@ public class Wopper{
 
         proxy.preInit();
     }
-
-    @EventHandler
-    public void init(FMLInitializationEvent event){
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockWopper),
-                "W W", "WCW", " W ",
-                'W', "plankWood",
-                'C', "chestWood"));
-    }
 }
