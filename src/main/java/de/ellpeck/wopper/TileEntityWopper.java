@@ -52,7 +52,7 @@ public class TileEntityWopper extends TileEntity implements ITickable{
                         if(items != null && !items.isEmpty()){
                             for(EntityItem item : items){
                                 if(item != null && !item.isDead){
-                                    ItemStack stack = item.getEntityItem();
+                                    ItemStack stack = item.getItem();
                                     if(!stack.isEmpty()){
                                         ItemStack copy = stack.copy();
 

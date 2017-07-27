@@ -8,6 +8,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
@@ -19,10 +20,9 @@ import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -47,11 +47,11 @@ public class BlockWopper extends BlockContainer{
         super(Material.WOOD);
 
         this.setRegistryName(name);
-        GameRegistry.register(this);
+        ForgeRegistries.BLOCKS.register(this);
 
         ItemBlock item = new ItemBlock(this);
         item.setRegistryName(name);
-        GameRegistry.register(item);
+        ForgeRegistries.ITEMS.register(item);
 
         this.setUnlocalizedName(Wopper.MOD_ID+"."+name);
         this.setHardness(5F);
@@ -81,7 +81,7 @@ public class BlockWopper extends BlockContainer{
     }
 
     @Override
-    public boolean isFullyOpaque(IBlockState state){
+    public boolean isTopSolid(IBlockState state){
         return true;
     }
 
@@ -134,8 +134,6 @@ public class BlockWopper extends BlockContainer{
 
     @Override
     public void neighborChanged(IBlockState state, World world, BlockPos pos, Block block, BlockPos fromPos){
-        super.neighborChanged(state, world, pos, block, fromPos);
-
         this.neighborChange(world, pos);
     }
 
@@ -159,7 +157,7 @@ public class BlockWopper extends BlockContainer{
 
     @Override
     public void addInformation(ItemStack stack, World player, List<String> tooltip, ITooltipFlag advanced){
-        tooltip.add(TextFormatting.ITALIC+I18n.translateToLocal(this.getUnlocalizedName()+".desc"));
+        tooltip.add(TextFormatting.ITALIC + I18n.format(this.getUnlocalizedName()+".desc"));
     }
 
     @Override
